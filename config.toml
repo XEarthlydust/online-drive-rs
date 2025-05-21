@@ -1,0 +1,47 @@
+[database]
+url = "postgres://klein:mika120@localhost/online-drive-base"
+pool_size = 20
+timeout = 5
+
+[nacos]
+api = "192.168.122.12:8848"
+auth_username = "klein"
+auth_password = "mika120"
+this_server_ip = "192.168.122.1"
+
+[port]
+bind_ip = "0.0.0.0"
+user = 8001
+file = 8002
+share = 8003
+commit = 8004
+
+[log]
+debug = false
+log_root = "/log"
+
+[openapi]
+enable = true
+
+[minio]
+endpoint = "http://192.168.122.12:9000"
+access_key = "klein"
+secret_key = "mika120***"
+region = "local"
+avatar_bucket = "avatar"
+file_bucket = "file"
+
+[jwt]
+exp_min = 600
+
+[upload]
+part_exp_min = 5
+
+[page]
+size = 10
+
+[sonyflake]
+id = 1
+
+
+

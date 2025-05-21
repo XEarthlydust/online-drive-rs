@@ -1,0 +1,25 @@
+[package]
+name = "common"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+chrono = { workspace = true }
+serde = { workspace = true }
+uuid = { workspace = true }
+rbdc-pg = { workspace = true }
+rbatis = { workspace = true }
+rbs = { workspace = true }
+salvo = { workspace = true }
+reqwest = { workspace = true }
+futures = { workspace = true }
+aws-config = { workspace = true }
+aws-sdk-s3 = { workspace = true }
+argon2 = { workspace = true }
+jsonwebtoken = { workspace = true }
+sha2 = { workspace = true }
+lazy_static = { workspace = true }
+thiserror = { workspace = true }
+toml = { workspace = true }
+tracing = { workspace = true }
+nacos-sdk = { workspace = true }

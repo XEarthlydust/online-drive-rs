@@ -1,0 +1,42 @@
+[workspace]
+resolver = "3"
+members = [
+    "common",
+    "services/commit-service",
+    "services/file-service",
+    "services/share-service",
+    "services/user-service",
+]
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+debug = false
+incremental = false
+overflow-checks = false
+strip = true
+
+[workspace.dependencies]
+argon2 = { version = "0.5" }
+aws-config = { version = "1.6" }
+aws-sdk-s3 = { version = "1.84" }
+chrono = { version = "0.4", features = ["serde"] }
+futures = { version = "0.3.31" }
+jsonwebtoken = { version = "9" }
+lazy_static = { version = "1.5" }
+nacos-sdk = { version = "0.5", features = ["default", "auth-by-aliyun"] }
+rbs = { version = "4.5" }
+rbatis = { version = "4.5" }
+rbdc-pg = { version = "4.5" }
+reqwest = { version = "0.12.15", features = ["stream"] }
+salvo = { version = "0.78.0", features = ["anyhow", "oapi", "cors", "logging"] }
+serde = { version = "1", features = ["derive"] }
+sha2 = { version = "0.10.9" }
+thiserror = { version = "2.0" }
+tikv-jemallocator = { version = "0.6" }
+toml = { version = "0.8" }
+tokio = { version = "1.45.0", features = ["full"] }
+tracing = { version = "0.1" }
+tracing-subscriber = { version = "0.3" }
+uuid = { version = "1.16.0", features = ["serde", "v4"] }

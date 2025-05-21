@@ -1,0 +1,16 @@
+[package]
+name = "commit-service"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+common = { path = "../../common" }
+rbatis = { workspace = true }
+salvo = { workspace = true }
+serde = { workspace = true }
+tokio = { workspace = true }
+tracing-subscriber = { workspace = true }
+uuid = { workspace = true }
+
+[target.'cfg(not(target_env = "msvc"))'.dependencies]
+tikv-jemallocator = { workspace = true }
