@@ -129,13 +129,14 @@ impl User {
     pub async fn update_info_by_id(
         rb: &RBatis,
         id: &Uuid,
+        username: &String,
         user_email: &String,
         sign: &String,
         telephone: &String,
     ) -> Result<(), AppError> {
         let result: u64 = rb.exec(
-            "UPDATE \"user\" SET user_email = ?, sign = ?, telephone = ? WHERE id = ? AND delete_flag = 0",
-            vec![rbs::to_value!(user_email), rbs::to_value!(sign), rbs::to_value!(telephone), rbs::to_value!(id)]
+            "UPDATE \"user\" SET username = ?, user_email = ?, sign = ?, telephone = ? WHERE id = ? AND delete_flag = 0",
+            vec![rbs::to_value!(username), rbs::to_value!(user_email), rbs::to_value!(sign), rbs::to_value!(telephone), rbs::to_value!(id)]
         ).await?.rows_affected;
         (result == 0)
             .then(|| Err::<(), AppError>(AppError::UserNotExists))

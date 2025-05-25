@@ -220,6 +220,7 @@ pub async fn update_userinfo(
         .map_err(|_e| AppError::MissingToken)?;
     UserService::change_userinfo(
         &claims.uid,
+        &change_info_dto.username,
         &change_info_dto.user_email,
         &change_info_dto.sign,
         &change_info_dto.telephone,

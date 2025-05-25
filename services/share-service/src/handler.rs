@@ -9,6 +9,8 @@ use salvo::oapi::ToSchema;
 use salvo::prelude::*;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+use common::db_pool;
+use common::module::item::Item;
 
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
 struct GetShareDto {
@@ -50,7 +52,12 @@ pub async fn get_share_publicly(
     }
 
     let a = match share.is_public {
-        Some(true) => Ok(true),
+        Some(true) => {
+            match Item::select_by_id(db_pool!(), &share.id).await {
+                Ok(_) => Ok(true),
+                Err(_) => Err(AppError::ShareFileNotFound),
+            }
+        },
         Some(false) => Ok(false),
         None => Err(AppError::ShareFileNotFound),
     }?;
@@ -85,6 +92,12 @@ pub async fn get_share_with_code(
         ShareService::timeout_delete_share(&share.id).await?;
         return Err(AppError::ShareFileNotFound);
     }
+
+    match Item::select_by_id(db_pool!(), &share.id).await {
+        Ok(_) => Ok(true),
+        Err(_) => Err(AppError::ShareFileNotFound),
+    }?;
+    
     let name = ShareService::get_share_name(&share.id).await?;
     let share = share.set_logic_name(name);
     res.render(Json(ResultData::<ShareVoWithName>::new(

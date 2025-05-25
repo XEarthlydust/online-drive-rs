@@ -74,6 +74,9 @@ pub enum AppError {
 
     #[error("Cannot get this file")]
     ShareCodeMismatched,
+
+    #[error("Storage limit reached")]
+    UserOutSize,
 }
 impl From<PasswordHashError> for AppError {
     fn from(err: PasswordHashError) -> Self {
@@ -207,6 +210,11 @@ impl Writer for AppError {
             AppError::ShareCodeMismatched => (
                 StatusCode::UNAUTHORIZED,
                 ResultCode::ShareCodeMismatched,
+                format!("{}", self.to_string()),
+            ),
+            AppError::UserOutSize => (
+                StatusCode::UNAUTHORIZED,
+                ResultCode::UserOutSize,
                 format!("{}", self.to_string()),
             ),
         };

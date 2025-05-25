@@ -32,6 +32,7 @@ pub enum ResultCode {
     CannotDeleteFile = 4016,
     CannotDeleteFolder = 4017,
     ShareCodeMismatched = 4018,
+    UserOutSize = 4019,
 
     UserExists = 4090,
     UserNotExists = 4040,

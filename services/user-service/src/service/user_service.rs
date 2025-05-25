@@ -54,11 +54,12 @@ impl UserService {
     }
     pub async fn change_userinfo(
         id: &Uuid,
+        username: &String,
         user_email: &String,
         sign: &String,
         telephone: &String,
     ) -> Result<(), AppError> {
-        User::update_info_by_id(db_pool!(), id, user_email, sign, telephone).await?;
+        User::update_info_by_id(db_pool!(), id, username, user_email, sign, telephone).await?;
         Ok(())
     }
     pub async fn change_password(

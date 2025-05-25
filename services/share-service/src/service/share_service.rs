@@ -15,6 +15,9 @@ impl ShareService {
             .first()
             .ok_or(AppError::ShareFileNotFound)?
             .to_owned();
+
+        Self::check_share_item(&share).await?;
+        
         Ok(share)
     }
 
@@ -25,8 +28,13 @@ impl ShareService {
             .ok_or(AppError::ShareFileNotFound)?
             .to_owned();
 
+
+        Self::check_share_item(&share).await?;
+        
         match share.is_public {
-            Some(true) => Ok(share),
+            Some(true) => {
+                Ok(share)
+            },
             Some(false) => match &share.pickup_code {
                 Some(code) if code == pickup_code => Ok(share),
                 _ => Err(AppError::ShareCodeMismatched),
@@ -107,5 +115,19 @@ impl ShareService {
             None
         };
         Ok(parent_id)
+    }
+    
+    pub async fn check_share_item(share: &Share) -> Result<(), AppError> {
+        let item_id = share.item_id.ok_or(AppError::ShareFileNotFound)?;
+        let user_id = share.user_id.ok_or(AppError::ShareFileNotFound)?;
+        let share_id = share.id.ok_or(AppError::ShareFileNotFound)?;
+        match Item::select_by_id(db_pool!(), &item_id).await?.get(0) {
+            None => {
+                Share::delete_by_id(db_pool!(), &share_id, &user_id).await?;
+                Err(AppError::ShareFileNotFound)
+            },
+            Some(_) => Ok(()),
+        }?;
+        Ok(())
     }
 }

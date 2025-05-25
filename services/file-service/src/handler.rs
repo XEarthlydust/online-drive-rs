@@ -1,6 +1,6 @@
 use crate::service::file_service::FileService;
 use aws_sdk_s3::types::CompletedPart;
-use common::config;
+use common::{config, db_pool};
 use common::module::error::AppError;
 use common::module::item::Item;
 use common::util::jwt::{create_payload, validate_payload, Claims, Operation};
@@ -12,6 +12,7 @@ use salvo::prelude::*;
 use salvo::Response;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+use common::module::user::User;
 
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
 struct HashUploadDto {
