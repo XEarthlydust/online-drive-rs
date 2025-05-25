@@ -7,10 +7,10 @@ use uuid::Uuid;
 
 lazy_static! {
     static ref DECODE_KEY: DecodingKey =
-        DecodingKey::from_rsa_pem(include_bytes!("../../../keys/public.key"))
+        DecodingKey::from_rsa_pem(include_bytes!("../../../keys/public.pem"))
             .expect("public keys parse failed");
     static ref ENCODE_KEY: EncodingKey =
-        EncodingKey::from_rsa_pem(include_bytes!("../../../keys/private.key"))
+        EncodingKey::from_rsa_pem(include_bytes!("../../../keys/private.pem"))
             .expect("private keys parse failed");
 }
 
