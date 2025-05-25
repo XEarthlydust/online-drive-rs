@@ -33,13 +33,6 @@ jobs:
           openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out keys/private.pem
           openssl rsa -in keys/private.pem -pubout -out keys/public.pem
 
-      - name: Embed key into Rust source
-        run: |
-          PRIV_KEY=$(awk 'NF {sub(/\r/, ""); printf "%s\\n", $0;}' keys/private.pem)
-          cat > src/embedded_key.rs <<EOF
-          pub const PRIVATE_KEY_PEM: &str = "${PRIV_KEY}";
-          EOF
-
       - name: Build project
         run: cargo build --release
 
