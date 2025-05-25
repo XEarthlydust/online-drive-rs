@@ -1,0 +1,55 @@
+name: Rust
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+
+      - name: Install OpenSSL
+        run: sudo apt-get update && sudo apt-get install -y openssl
+
+      - name: Generate RSA2048 key
+        run: |
+          mkdir -p keys
+          openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out keys/private.pem
+          openssl rsa -in keys/private.pem -pubout -out keys/public.pem
+
+      - name: Embed key into Rust source
+        run: |
+          PRIV_KEY=$(awk 'NF {sub(/\r/, ""); printf "%s\\n", $0;}' keys/private.pem)
+          cat > src/embedded_key.rs <<EOF
+          pub const PRIVATE_KEY_PEM: &str = "${PRIV_KEY}";
+          EOF
+
+      - name: Build project
+        run: cargo build --release
+
+      - name: Upload multiple artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: selected-artifacts
+          path: |
+            target/release/user-service
+            target/release/file-service
+            target/release/share-service
+            target/release/commit-service
+
